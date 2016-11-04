@@ -1,67 +1,112 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-public class MyGdxGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	Sprite sprite;
-	private Pixmap pixmap;
-	
+public class MyGdxGame implements ApplicationListener {
+	private SpriteBatch batch;
+	private Skin skin;
+	private Stage stage;
+	private Float sqLen;
+
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
+		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+		stage = new Stage();
+		sqLen = 200f;
 
-		// A Pixmap is basically a raw image in memory as repesented by pixels
-		// We create one 256 wide, 128 height using 8 bytes for Red, Green, Blue and Alpha channels
-		pixmap = new Pixmap(256,128, Pixmap.Format.RGBA8888);
+		final TextButton button = new TextButton("Click me", skin, "default");
+		final TextButton button2 = new TextButton("Click me", skin, "default");
+		final TextButton button3 = new TextButton("Click me", skin, "default");
 
-		//Fill it red
-		pixmap.setColor(Color.RED);
-		pixmap.fill();
+		final TextButton settings = new TextButton("Click me", skin, "default");
 
-		//Draw two lines forming an X
-		pixmap.setColor(Color.BLACK);
-		pixmap.drawLine(0, 0, pixmap.getWidth()-1, pixmap.getHeight()-1);
-		pixmap.drawLine(0, pixmap.getHeight()-1, pixmap.getWidth()-1, 0);
+		settings.setWidth(sqLen*3/5);
+		settings.setHeight(sqLen*3/5);
+		settings.setPosition(30f, Gdx.graphics.getHeight() - sqLen*3/5 - 30f);
 
-		//Draw a circle about the middle
-		pixmap.setColor(Color.YELLOW);
-		pixmap.drawCircle(pixmap.getWidth()/2, pixmap.getHeight()/2, pixmap.getHeight()/2 - 1);
+		button.setWidth(sqLen);
+		button.setHeight(sqLen);
+		button.setPosition(Gdx.graphics.getWidth() /5 - sqLen + 30f, 30f);
 
+		button2.setWidth(sqLen);
+		button2.setHeight(sqLen);
+		button2.setPosition(Gdx.graphics.getWidth()*3/5 - sqLen, 30f);
 
-		img = new Texture(pixmap);
+		button3.setWidth(sqLen);
+		button3.setHeight(sqLen);
+		button3.setPosition(Gdx.graphics.getWidth() - sqLen -30f, 30f);
 
-		//It's the textures responsibility now... get rid of the pixmap
-		pixmap.dispose();
+		button.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				button.setText("You clicked the button");
+			}
+		});
 
-		sprite = new Sprite(img);
+		button2.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				button2.setText("You clicked the button");
+			}
+		});
+
+		button3.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				button3.setText("You clicked the button");
+			}
+		});
+
+		settings.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				settings.setText("You clicked the button");
+			}
+		});
+
+		//TO-DO: ADD THE FUNCTIONALITY TO THE LISTENERS
+
+		stage.addActor(button);
+		stage.addActor(button2);
+		stage.addActor(button3);
+		stage.addActor(settings);
+
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
 	public void dispose() {
 		batch.dispose();
-		img.dispose();
 	}
 
 	@Override
 	public void render() {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
-		sprite.setPosition(0, 0);
-		sprite.draw(batch);
-		sprite.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-		sprite.draw(batch);
+		stage.draw();
 		batch.end();
 	}
 
+	@Override
+	public void resize(int width, int height) {
+	}
+
+	@Override
+	public void pause() {
+	}
+
+	@Override
+	public void resume() {
+	}
 }
