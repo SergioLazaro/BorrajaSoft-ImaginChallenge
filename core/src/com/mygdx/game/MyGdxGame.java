@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -28,6 +29,8 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 	private int gold, ammo;
 	private String goldLabel, ammoLabel;
 	private GlyphLayout goldLayout, ammoLayout;
+	private Texture background;
+
 
 	@Override
 	public void create() {
@@ -35,6 +38,8 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 		stage = new Stage();
 		sqLen = 200f; // CALCULATE A REASONABLE VALUE
+
+		background = new Texture("background.png");
 
 		Gdx.app.log("CREATE", "create");
 
@@ -132,6 +137,8 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
+
+		batch.draw(background,0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		goldLayout.setText(font, goldLabel);
 		float w = goldLayout.width;
