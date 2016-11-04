@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,12 +11,15 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.characters.Megaman;
 
-public class MyGdxGame implements ApplicationListener {
+
+
+public class MyGdxGame implements ApplicationListener, InputProcessor {
 	private SpriteBatch batch;
 	private Skin skin;
 	private Stage stage;
@@ -30,6 +35,14 @@ public class MyGdxGame implements ApplicationListener {
 		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 		stage = new Stage();
 		sqLen = 200f; // CALCULATE A REASONABLE VALUE
+
+		Gdx.app.log("CREATE", "create");
+
+		// Add listener in screen and stage
+		InputMultiplexer multiplexer = new InputMultiplexer();
+		multiplexer.addProcessor(stage);
+		multiplexer.addProcessor(this);
+		Gdx.input.setInputProcessor(multiplexer);
 
 		font = new BitmapFont();
 		font.getData().setScale(4);
@@ -104,7 +117,7 @@ public class MyGdxGame implements ApplicationListener {
 		stage.addActor(button3);
 		stage.addActor(settings);
 
-		Gdx.input.setInputProcessor(stage);
+		//Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
@@ -118,13 +131,7 @@ public class MyGdxGame implements ApplicationListener {
 		//Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		batch.begin();
-
-		stage.draw();
-
-		batch.end();
-
-		batch.begin();
+        batch.begin();
 
 		goldLayout.setText(font, goldLabel);
 		float w = goldLayout.width;
@@ -137,6 +144,14 @@ public class MyGdxGame implements ApplicationListener {
 		font2.draw(batch, ammoLabel, Gdx.graphics.getWidth() - w, y);
 
 		batch.end();
+
+        batch.begin();
+        stage.act(Gdx.graphics.getDeltaTime());
+        batch.end();
+
+        batch.begin();
+        stage.draw();
+        batch.end();
 
 	}
 
@@ -151,4 +166,55 @@ public class MyGdxGame implements ApplicationListener {
 	@Override
 	public void resume() {
 	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
+
+	/**
+	 * Pulsación en la pantalla -> crear nuevo bicho
+	 */
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		Gdx.app.log("TOUCHDOWN", "Megaman va!");
+
+		Megaman b = new Megaman(screenX, Gdx.graphics.getHeight()-screenY);
+		b.setTouchable(Touchable.enabled);
+
+		stage.addActor(b);
+
+		return true;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		return false;
+	}
+
 }
