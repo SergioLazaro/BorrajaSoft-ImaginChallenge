@@ -11,14 +11,14 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
-		setContentView(R.layout.content_layout_id);
+		/*setContentView(R.layout.content_layout_id);
 
 		final Button button = (Button) findViewById(R.id.button_id);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// Perform action on click
 			}
-		});
+		});*/
 
 
 

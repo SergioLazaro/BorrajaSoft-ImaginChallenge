@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.characters.GenericBicho;
 import com.mygdx.characters.Megaman;
+
+import java.util.Random;
 
 
 public class DefenseMap extends GenericMap implements ApplicationListener, InputProcessor {
@@ -40,7 +43,8 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 	private final int FREEZE_PRICE = 50;
 	private final int METEOR_PRIZE = 50;
 	private final int INIT_AMMO = 10;
-	private final int INIT_GOLD = 20;
+	private final int INIT_GOLD = 60;
+	private final int MAX_METEOR_DISTANCE = 250;
 
 
 	@Override
@@ -231,10 +235,59 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		button3.setPosition(Gdx.graphics.getWidth() - sqLen -30f, 30f);
 
 
+		// Meteor
 		button.addListener(new ClickListener(){
+
+            // TODO: restar monedicas
+
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				//button.setText("You clicked the button");
+
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+					for (int i=0; i<6; i++) {
+						Random r = new Random();
+						int rx = r.nextInt(Gdx.graphics.getWidth());
+						int ry = r.nextInt(Gdx.graphics.getHeight());
+
+						Array<Actor> actors = stage.getActors();
+						for (Actor a:actors) {
+							if (a instanceof GenericBicho) {
+								if (close(a.getX(), a.getY(), rx, ry)) {
+									a.remove();
+								}
+							}
+						}
+
+                        class MyActor extends Actor {
+                            private Texture texture;
+                            private int rx,ry;
+                            public MyActor(String text, int rx, int ry) {
+                                this.texture = new Texture(text);
+                                setBounds(rx,ry, Math.round(Gdx.graphics.getWidth()*0.3), Math.round(Gdx.graphics.getWidth()*0.3));
+                                this.rx = rx; this.ry=ry;
+                            }
+                            @Override
+                            public void draw(Batch batch, float alpha){
+                                //batch.draw(texture,rx,ry);
+                                batch.draw(this.texture,rx, ry, Math.round(Gdx.graphics.getWidth()*0.3), Math.round(Gdx.graphics.getWidth()*0.3));
+                            }
+                        }
+
+                        MyActor a1 = new MyActor("001.png", rx,ry);
+                        stage.addActor(a1);
+						try {
+							Thread.sleep(400);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+                        a1.remove();
+
+					}
+					}
+				}).start();
+
 			}
 		});
 
@@ -252,6 +305,7 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 			}
 		});
 
+		// Freeze
 		button3.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
@@ -294,6 +348,22 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		stage.addActor(button2);
 		stage.addActor(button3);
 		stage.addActor(settings);
+	}
+
+	private boolean close(float ax, float ay, int mx, int my) {
+		// And distance of point from the center of the circle
+		float distance = (float) Math.sqrt(((ax - mx) * (ax - mx))
+				+ ((ay - my) * (ay - my)));
+
+        Gdx.app.log("DISTANCE", "Distance: " + distance);
+
+
+        if (distance <= MAX_METEOR_DISTANCE) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	private void goldThread(){
