@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -40,8 +41,9 @@ public class AttackMap extends GenericMap implements ApplicationListener, InputP
 	public void create() {
 		batch = new SpriteBatch();
 		stage = new Stage();
-		sqLen = 200f; // CALCULATE A REASONABLE VALUE
-		gold = 20;
+		sqLen = (float) Math.round(Gdx.graphics.getWidth()/5.0); // CALCULATE A REASONABLE VALUE
+		gold = 30;
+		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
 
 		cp = new ComunicationProtocol("1234", this);
@@ -60,6 +62,7 @@ public class AttackMap extends GenericMap implements ApplicationListener, InputP
 		initializeButtonsTexts();
 
 		goldThread();
+		isEnd();
 
 	}
 
@@ -252,10 +255,11 @@ public class AttackMap extends GenericMap implements ApplicationListener, InputP
 							for (Actor a:actors) {
 								if (a instanceof GenericBicho) {
 									count ++;
-									gold ++;
-									goldLabel = "GOLD: " + gold;
 								}
 							}
+
+							gold += count*1.3;
+							goldLabel = "GOLD: " + gold;
 
 							Gdx.app.log("THREAD", "Num Actors: " + count);
 

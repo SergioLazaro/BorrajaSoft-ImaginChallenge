@@ -8,7 +8,7 @@ import com.mygdx.game.GenericMap;
 
 public class Invader extends GenericBicho{
 
-    private static final int VEL = 200;
+    private static final int VEL = 180;
     private static final int HEALTH = 10;
     private static final int ATTACK = 5;
     private static final int PRICE = 5;

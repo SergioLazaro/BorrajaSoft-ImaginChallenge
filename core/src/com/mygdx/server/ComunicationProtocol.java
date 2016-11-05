@@ -25,7 +25,8 @@ public class ComunicationProtocol {
     public ComunicationProtocol(String port, GenericMap map) {
         this.map = map;
 
-        SERVERNAME = "http://192.168.3.1";
+        //SERVERNAME = "http://192.168.3.1"; // Arriba
+        SERVERNAME = "http://192.168.2.1"; // Abajo
         SERVERPORT = port;
 
         try {
@@ -33,6 +34,8 @@ public class ComunicationProtocol {
             mSocket = IO.socket(_url);
             mSocket.on("receive", onNewMessage);
             mSocket.on("connected", onConnected);
+            mSocket.on("warning", onWarning);
+            mSocket.on("endgame",onEndGame);
             Gdx.app.log("NEW_CONNECTION", "Port " + SERVERPORT);
         } catch (URISyntaxException e) {
             Gdx.app.log("ERROR", "Error " + SERVERPORT);
@@ -100,5 +103,41 @@ public class ComunicationProtocol {
             });
         }
     };
+
+
+    private Emitter.Listener onWarning = new Emitter.Listener() {
+
+        @Override
+        public void call(final Object... args) {
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    //JSONObject data = (JSONObject) args[0];
+                    String data = (String) args[0];
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onEndGame = new Emitter.Listener() {
+
+        @Override
+        public void call(final Object... args) {
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    //JSONObject data = (JSONObject) args[0];
+                    String data = (String) args[0];
+                    map.end = data;
+                }
+            });
+        }
+    };
+
+
+    public void notifyEndGame(){
+        mSocket.emit("result","");
+        Gdx.app.log("NOTIFY_END", "Ce fini");
+    }
 
 }

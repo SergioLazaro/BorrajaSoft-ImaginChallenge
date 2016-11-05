@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -35,11 +36,11 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 	private int typeBicho = 1;
 	private boolean freeze = false;
 
-	private final int AMMO_PRICE = 10;
+	private final int AMMO_PRICE = 15;
 	private final int FREEZE_PRICE = 50;
 	private final int METEOR_PRIZE = 50;
-	private final int INIT_AMMO = 10;
-	private final int INIT_GOLD = 60;
+	private final int INIT_AMMO = 15;
+	private final int INIT_GOLD = 20;
 	private final int MAX_METEOR_DISTANCE = 250;
 
 
@@ -49,6 +50,7 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		batch = new SpriteBatch();
 		stage = new Stage();
 		sqLen = (float) Math.round(Gdx.graphics.getWidth()/5.0); // CALCULATE A REASONABLE VALUE
+		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
         cp = new ComunicationProtocol("1235", this);
         cp.connect();
@@ -69,6 +71,7 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		initializeButtonsTexts();
 
 		//goldThread();
+		isEnd();
 
 	}
 
@@ -289,7 +292,7 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 				//button2.setText("You clicked the button");
 				if (gold - AMMO_PRICE >= 0) {
 					gold -= AMMO_PRICE;
-					ammo += AMMO_PRICE;
+					ammo += 25;
 					ammoLabel = "AMMO: " + ammo;
 					goldLabel = "GOLD: " + gold;
 				}

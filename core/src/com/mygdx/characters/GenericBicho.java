@@ -109,7 +109,8 @@ public abstract class GenericBicho extends Actor {
         }
 
         if (!moveAttack && this.getY() == 0) {  // Remove actor from stage
-            // TODO: Llamada al servidor
+            game.cp.notifyEndGame();
+            this.remove();
         }
     }
 
