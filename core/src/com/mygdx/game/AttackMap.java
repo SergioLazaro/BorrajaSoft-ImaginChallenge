@@ -86,11 +86,8 @@ public class AttackMap extends GenericMap implements ApplicationListener, InputP
 		batch.end();
 
         batch.begin();
-        stage.act(Gdx.graphics.getDeltaTime());
-        batch.end();
-
-        batch.begin();
-        stage.draw();
+		stage.draw();
+		stage.act(Gdx.graphics.getDeltaTime());
         batch.end();
 
 	}

@@ -34,6 +34,13 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 	private Texture background;
 
 	private int typeBicho = 1;
+	private boolean freeze = false;
+
+	private final int AMMO_PRICE = 10;
+	private final int FREEZE_PRICE = 50;
+	private final int METEOR_PRIZE = 50;
+	private final int INIT_AMMO = 10;
+	private final int INIT_GOLD = 20;
 
 
 	@Override
@@ -43,8 +50,8 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		stage = new Stage();
 		sqLen = 200f; // CALCULATE A REASONABLE VALUE
 
-		ammo = 10;
-		gold = 20;
+		ammo = INIT_AMMO;
+		gold = INIT_GOLD;
 
 		stage.addActor(new Megaman(350, Gdx.graphics.getHeight(), this, false));
 
@@ -60,7 +67,7 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 
 		initializeButtonsTexts();
 
-		goldThread();
+		//goldThread();
 
 	}
 
@@ -92,12 +99,11 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		batch.end();
 
         batch.begin();
-        stage.act(Gdx.graphics.getDeltaTime());
-        batch.end();
-
-        batch.begin();
-        stage.draw();
-        batch.end();
+		if(!freeze) {
+			stage.act(Gdx.graphics.getDeltaTime());
+		}
+		stage.draw();
+		batch.end();
 
 	}
 
@@ -203,6 +209,7 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 
 		final ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("meteor_button.png")))); //Set the button up
 		final ImageButton button2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("ammo_button.png")))); //Set the button up
+		final ImageButton button3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("ammo_button.png")))); //Set the button up
 
 
 		final TextButton settings = new TextButton("Click me", skin, "default");
@@ -219,6 +226,10 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		button2.setHeight(sqLen);
 		button2.setPosition(Gdx.graphics.getWidth()*3/5 - sqLen, 30f);
 
+		button3.setWidth(sqLen);
+		button3.setHeight(sqLen);
+		button3.setPosition(Gdx.graphics.getWidth() - sqLen -30f, 30f);
+
 
 		button.addListener(new ClickListener(){
 			@Override
@@ -232,15 +243,43 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				//button2.setText("You clicked the button");
-				if (gold - 10 >= 0) {
-					gold -= 10;
-					ammo += 10;
+				if (gold - AMMO_PRICE >= 0) {
+					gold -= AMMO_PRICE;
+					ammo += AMMO_PRICE;
 					ammoLabel = "AMMO: " + ammo;
 					goldLabel = "GOLD: " + gold;
 				}
 			}
 		});
 
+		button3.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				if (gold - FREEZE_PRICE >= 0) {
+					gold -= FREEZE_PRICE;
+					goldLabel = "GOLD: " + gold;
+					freeze = true;
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							Gdx.app.postRunnable(new Runnable() {
+								@Override
+								public void run() {
+
+								}
+							});
+
+							try {
+								Thread.sleep(1500);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							freeze = false;
+						}
+					}).start();
+				}
+			}
+		});
 
 		settings.addListener(new ClickListener(){
 			@Override
@@ -253,6 +292,7 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 
 		stage.addActor(button);
 		stage.addActor(button2);
+		stage.addActor(button3);
 		stage.addActor(settings);
 	}
 

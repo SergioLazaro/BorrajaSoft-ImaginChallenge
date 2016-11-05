@@ -13,7 +13,7 @@ import com.mygdx.game.GenericMap;
 
 public abstract class GenericBicho extends Actor {
 
-    protected int health;
+    public int health;
     protected int vel;
     protected int attack;
     protected float size;
@@ -50,10 +50,13 @@ public abstract class GenericBicho extends Actor {
         this.addListener(new InputListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int buttons){
                 if (deductAmmo()) {
-                    ((GenericBicho) event.getTarget()).started = true;
-                    setVisible(false);
-                    ((GenericBicho) event.getTarget()).remove();
-                    addGold();
+                    ((GenericBicho) event.getTarget()).health -= 10;
+                    if (((GenericBicho) event.getTarget()).health <= 0) {
+                        ((GenericBicho) event.getTarget()).started = true;
+                        setVisible(false);
+                        ((GenericBicho) event.getTarget()).remove();
+                        addGold();
+                    }
                 }
                 return true;
             }
