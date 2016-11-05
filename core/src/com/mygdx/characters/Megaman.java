@@ -2,6 +2,7 @@ package com.mygdx.characters;
 
 import com.mygdx.game.GenericMap;
 
+
 /**
  * Created by alber on 04/11/2016.
  */
@@ -17,6 +18,7 @@ public class Megaman extends GenericBicho{
 
     public Megaman(int posX, int posY, GenericMap game, boolean movAttack){
         super(posX, posY, VEL, HEALTH, ATTACK, (float) SIZE, sTexture, PRICE, game, movAttack);
+
     }
 
 }

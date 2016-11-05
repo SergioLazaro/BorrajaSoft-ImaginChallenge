@@ -20,6 +20,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
         </activity>
     </application>
 
