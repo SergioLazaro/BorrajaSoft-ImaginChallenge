@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,6 +24,8 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.characters.GenericBicho;
 import com.mygdx.characters.Megaman;
 
+import java.util.Random;
+
 
 public class DefenseMap extends GenericMap implements ApplicationListener, InputProcessor {
 	private SpriteBatch batch;
@@ -34,6 +37,14 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 	private Texture background;
 
 	private int typeBicho = 1;
+	private boolean freeze = false;
+
+	private final int AMMO_PRICE = 10;
+	private final int FREEZE_PRICE = 50;
+	private final int METEOR_PRIZE = 50;
+	private final int INIT_AMMO = 10;
+	private final int INIT_GOLD = 60;
+	private final int MAX_METEOR_DISTANCE = 250;
 
 
 	@Override
@@ -43,8 +54,8 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		stage = new Stage();
 		sqLen = 200f; // CALCULATE A REASONABLE VALUE
 
-		ammo = 10;
-		gold = 20;
+		ammo = INIT_AMMO;
+		gold = INIT_GOLD;
 
 		stage.addActor(new Megaman(350, Gdx.graphics.getHeight(), this, false));
 
@@ -60,7 +71,7 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 
 		initializeButtonsTexts();
 
-		goldThread();
+		//goldThread();
 
 	}
 
@@ -92,12 +103,11 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		batch.end();
 
         batch.begin();
-        stage.act(Gdx.graphics.getDeltaTime());
-        batch.end();
-
-        batch.begin();
-        stage.draw();
-        batch.end();
+		if(!freeze) {
+			stage.act(Gdx.graphics.getDeltaTime());
+		}
+		stage.draw();
+		batch.end();
 
 	}
 
@@ -203,6 +213,7 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 
 		final ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("meteor_button.png")))); //Set the button up
 		final ImageButton button2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("ammo_button.png")))); //Set the button up
+		final ImageButton button3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("snowflake_button.png")))); //Set the button up
 
 
 		final TextButton settings = new TextButton("Click me", skin, "default");
@@ -219,11 +230,64 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		button2.setHeight(sqLen);
 		button2.setPosition(Gdx.graphics.getWidth()*3/5 - sqLen, 30f);
 
+		button3.setWidth(sqLen);
+		button3.setHeight(sqLen);
+		button3.setPosition(Gdx.graphics.getWidth() - sqLen -30f, 30f);
 
+
+		// Meteor
 		button.addListener(new ClickListener(){
+
+            // TODO: restar monedicas
+
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				//button.setText("You clicked the button");
+
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+					for (int i=0; i<6; i++) {
+						Random r = new Random();
+						int rx = r.nextInt(Gdx.graphics.getWidth());
+						int ry = r.nextInt(Gdx.graphics.getHeight());
+
+						Array<Actor> actors = stage.getActors();
+						for (Actor a:actors) {
+							if (a instanceof GenericBicho) {
+								if (close(a.getX(), a.getY(), rx, ry)) {
+									a.remove();
+								}
+							}
+						}
+
+                        class MyActor extends Actor {
+                            private Texture texture;
+                            private int rx,ry;
+                            public MyActor(String text, int rx, int ry) {
+                                this.texture = new Texture(text);
+                                setBounds(rx,ry, Math.round(Gdx.graphics.getWidth()*0.3), Math.round(Gdx.graphics.getWidth()*0.3));
+                                this.rx = rx; this.ry=ry;
+                            }
+                            @Override
+                            public void draw(Batch batch, float alpha){
+                                //batch.draw(texture,rx,ry);
+                                batch.draw(this.texture,rx, ry, Math.round(Gdx.graphics.getWidth()*0.3), Math.round(Gdx.graphics.getWidth()*0.3));
+                            }
+                        }
+
+                        MyActor a1 = new MyActor("001.png", rx,ry);
+                        stage.addActor(a1);
+						try {
+							Thread.sleep(400);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+                        a1.remove();
+
+					}
+					}
+				}).start();
+
 			}
 		});
 
@@ -232,15 +296,44 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				//button2.setText("You clicked the button");
-				if (gold - 10 >= 0) {
-					gold -= 10;
-					ammo += 10;
+				if (gold - AMMO_PRICE >= 0) {
+					gold -= AMMO_PRICE;
+					ammo += AMMO_PRICE;
 					ammoLabel = "AMMO: " + ammo;
 					goldLabel = "GOLD: " + gold;
 				}
 			}
 		});
 
+		// Freeze
+		button3.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y){
+				if (gold - FREEZE_PRICE >= 0) {
+					gold -= FREEZE_PRICE;
+					goldLabel = "GOLD: " + gold;
+					freeze = true;
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							Gdx.app.postRunnable(new Runnable() {
+								@Override
+								public void run() {
+
+								}
+							});
+
+							try {
+								Thread.sleep(1500);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							freeze = false;
+						}
+					}).start();
+				}
+			}
+		});
 
 		settings.addListener(new ClickListener(){
 			@Override
@@ -253,7 +346,24 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 
 		stage.addActor(button);
 		stage.addActor(button2);
+		stage.addActor(button3);
 		stage.addActor(settings);
+	}
+
+	private boolean close(float ax, float ay, int mx, int my) {
+		// And distance of point from the center of the circle
+		float distance = (float) Math.sqrt(((ax - mx) * (ax - mx))
+				+ ((ay - my) * (ay - my)));
+
+        Gdx.app.log("DISTANCE", "Distance: " + distance);
+
+
+        if (distance <= MAX_METEOR_DISTANCE) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	private void goldThread(){

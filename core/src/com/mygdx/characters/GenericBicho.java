@@ -13,7 +13,7 @@ import com.mygdx.game.GenericMap;
 
 public abstract class GenericBicho extends Actor {
 
-    protected int health;
+    public int health;
     protected int vel;
     protected int attack;
     protected float size;
@@ -50,10 +50,13 @@ public abstract class GenericBicho extends Actor {
         this.addListener(new InputListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int buttons){
                 if (deductAmmo()) {
-                    ((GenericBicho) event.getTarget()).started = true;
-                    setVisible(false);
-                    ((GenericBicho) event.getTarget()).remove();
-                    addGold();
+                    ((GenericBicho) event.getTarget()).health -= 10;
+                    if (((GenericBicho) event.getTarget()).health <= 0) {
+                        ((GenericBicho) event.getTarget()).started = true;
+                        setVisible(false);
+                        ((GenericBicho) event.getTarget()).remove();
+                        addGold();
+                    }
                 }
                 return true;
             }
@@ -88,7 +91,6 @@ public abstract class GenericBicho extends Actor {
     @Override
     public void draw(Batch batch, float alpha){
         batch.draw(texture,this.getX(),this.getY(), Gdx.graphics.getWidth()*size, Gdx.graphics.getWidth()*size);
-
         // Check if actor is inside screen
         if (moveAttack && this.getY() == Gdx.graphics.getHeight()) {  // Remove actor from stage
             // TODO: Llamada al servidor
@@ -132,4 +134,20 @@ public abstract class GenericBicho extends Actor {
         // Otherwise, it isnt
         return null;
     }
+
+    /*protected void goldWin(){
+        Gdx.app.log("MEGAMAN INVISIBLE", "DEBERIA BORRAR");
+        GlyphLayout goldLayout = new GlyphLayout();
+        BitmapFont font = new BitmapFont();
+        String goldLabel = "+3"; // SET TO A CALCULATED VALUE, NOT A FIXED VALUE
+        font.getData().setScale(3);
+        font.setColor(Color.GOLD);
+
+        goldLayout.setText(font, goldLabel);
+        float w = this.getX();
+        float y = this.getY();
+        game.batch.begin();
+        font.draw(game.batch, goldLabel, Gdx.graphics.getWidth()*size, Gdx.graphics.getWidth()*size);
+        game.batch.end();
+    }*/
 }

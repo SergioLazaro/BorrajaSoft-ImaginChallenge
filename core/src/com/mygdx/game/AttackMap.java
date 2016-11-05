@@ -86,11 +86,8 @@ public class AttackMap extends GenericMap implements ApplicationListener, InputP
 		batch.end();
 
         batch.begin();
-        stage.act(Gdx.graphics.getDeltaTime());
-        batch.end();
-
-        batch.begin();
-        stage.draw();
+		stage.draw();
+		stage.act(Gdx.graphics.getDeltaTime());
         batch.end();
 
 	}
@@ -256,7 +253,6 @@ public class AttackMap extends GenericMap implements ApplicationListener, InputP
 				// do something important here, asynchronously to the rendering thread
 				// post a Runnable to the rendering thread that processes the result
 				while (true) {
-
 					Gdx.app.postRunnable(new Runnable() {
 						@Override
 						public void run() {
@@ -287,4 +283,6 @@ public class AttackMap extends GenericMap implements ApplicationListener, InputP
 			}
 		}).start();
 	}
+
+
 }
