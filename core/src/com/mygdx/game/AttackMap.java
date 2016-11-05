@@ -132,13 +132,13 @@ public class AttackMap extends GenericMap implements ApplicationListener, InputP
 		GenericBicho actor = null;
 		switch (typeBicho) {
 			case 1:
-				actor = new Invader(screenX, Gdx.graphics.getHeight()-screenY, this);
+				actor = new Invader(screenX, Gdx.graphics.getHeight()-screenY, this, true);
 				break;
 			case 2:
-				actor = new Megaman(screenX, Gdx.graphics.getHeight()-screenY, this);
+				actor = new Megaman(screenX, Gdx.graphics.getHeight()-screenY, this, true);
 				break;
 			case 3:
-				actor = new Centauro(screenX, Gdx.graphics.getHeight()-screenY, this);
+				actor = new Centauro(screenX, Gdx.graphics.getHeight()-screenY, this, true);
 				break;
 		}
 		actor.setTouchable(Touchable.disabled);

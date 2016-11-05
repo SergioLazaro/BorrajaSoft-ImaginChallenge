@@ -1,7 +1,5 @@
 package com.mygdx.characters;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.mygdx.game.GenericMap;
 
 /**
@@ -17,23 +15,33 @@ public class Centauro extends GenericBicho{
     private static final String sTexture = "centauro.png";
     private static final double SIZE = 0.30;
 
-    public Centauro(int posX, int posY, GenericMap game){
-        super(posX, posY, VEL, HEALTH, ATTACK, (float) SIZE, sTexture, PRICE, game);
+    public Centauro(int posX, int posY, GenericMap game, boolean movAttack){
+        super(posX, posY, VEL, HEALTH, ATTACK, (float) SIZE, sTexture, PRICE, game, movAttack);
 
-        this.addListener(new InputListener(){
+        /*this.addListener(new InputListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int buttons){
-                ((Centauro)event.getTarget()).started = true;
-                setVisible(false);
-                ((Centauro)event.getTarget()).remove();
-                addGold();
+                if (deductAmmo()) {
+                    ((Centauro) event.getTarget()).started = true;
+                    setVisible(false);
+                    ((Centauro) event.getTarget()).remove();
+                    addGold();
+                }
                 return true;
             }
-        });
+        });*/
     }
 
-    private void addGold() {
+    /*private void addGold() {
         this.game.gold += this.getPrice();
         this.game.goldLabel = "GOLD: " + this.game.gold;
     }
+
+    private boolean deductAmmo() {
+        if (game.ammo > 0) {
+            this.game.ammo--;
+            this.game.ammoLabel = "AMMO: " + this.game.ammo;
+            return true;
+        }else { return false; }
+    }*/
 
 }
