@@ -18,21 +18,21 @@ public abstract class GenericBicho extends Actor {
     protected Texture texture;
     public boolean started = false;
     protected int posX, posY;
+    protected int price;
 
 
-    public GenericBicho(int posX, int posY, int vel, int health, int attack, float size, String t) {
+    public GenericBicho(int posX, int posY, int vel, int health, int attack, float size, String t, int price) {
         this.texture = new Texture(t);
         this.vel = vel;
         this.health = health;
         this.attack = attack;
         this.size = size;
+        this.price = price;
 
         this.posX = Math.max(0,Math.round(posX-Gdx.graphics.getWidth()*size/2));
         this.posY = Math.max(0,Math.round(posY-Gdx.graphics.getWidth()*size/2));
 
         setBounds(this.posX, this.posY, Gdx.graphics.getWidth()*size, Gdx.graphics.getWidth()*size);
-        //this.scaleBy(texture.getWidth()*8/100);
-
 
         this.addAction(Actions.moveTo(this.posX, Gdx.graphics.getHeight(), (Gdx.graphics.getHeight()-posY)/vel));
 
@@ -47,6 +47,7 @@ public abstract class GenericBicho extends Actor {
         return health>0;
     }
 
+    public int getPrice() {return price;}
     @Override
     public void draw(Batch batch, float alpha){
         batch.draw(texture,this.getX(),this.getY(), Gdx.graphics.getWidth()*size, Gdx.graphics.getWidth()*size);
@@ -84,7 +85,9 @@ public abstract class GenericBicho extends Actor {
                 + ((centerY - y) * (centerY - y)));
 
         // If the distance is less than the circle radius, it's a hit
-        if(distance <= radius) return this;
+        if(distance <= radius) {
+            return this;
+        }
 
         // Otherwise, it isnt
         return null;

@@ -10,11 +10,12 @@ public class DefaultBicho extends GenericBicho {
     private static final int HEALTH = 100;
     private static final int ATTACK = 5;
     private static final double SIZE = 0.1;
+    private static final int PRICE = 1;
     private static final String sTexture = "invader.png";
 
 
     public DefaultBicho(int posX, int posY){
-        super(posX, posY, VEL, HEALTH, ATTACK, (float) SIZE, sTexture);
+        super(posX, posY, VEL, HEALTH, ATTACK, (float) SIZE, sTexture, PRICE);
 
         this.addListener(new InputListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int buttons){
