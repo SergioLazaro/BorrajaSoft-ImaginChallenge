@@ -10,8 +10,6 @@ public class AndroidLauncher extends Activity {
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-
 		setContentView(R.layout.launch);
 
 		final Button bt1 = (Button) findViewById(R.id.bt1);
@@ -34,6 +32,5 @@ public class AndroidLauncher extends Activity {
 
 
 
-		//initialize(new DefenseMap(), config);
 	}
 }
