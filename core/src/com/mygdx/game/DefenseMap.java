@@ -219,12 +219,12 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		final TextButton settings = new TextButton("Click me", skin, "default");
 
 		settings.setWidth(sqLen*3/5);
-		settings.setHeight(sqLen*3/5);
-		settings.setPosition(30f, Gdx.graphics.getHeight() - sqLen*3/5 - 30f);
+        settings.setHeight(sqLen*3/5);
+        settings.setPosition(30f, Gdx.graphics.getHeight() - sqLen*3/5 - 30f);
 
-		button.setWidth(sqLen);
-		button.setHeight(sqLen);
-		button.setPosition(Gdx.graphics.getWidth() /5 - sqLen + 30f, 30f);
+        button.setWidth(sqLen);
+        button.setHeight(sqLen);
+        button.setPosition(Gdx.graphics.getWidth() /5 - sqLen + 30f, 30f);
 
 		button2.setWidth(sqLen);
 		button2.setHeight(sqLen);

@@ -1,27 +1,39 @@
 package com.mygdx.game;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
-import com.badlogic.gdx.backends.android.AndroidApplication;
-import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-
-public class AndroidLauncher extends AndroidApplication {
+public class AndroidLauncher extends Activity {
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		//AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
-		/*setContentView(R.layout.content_layout_id);
+		setContentView(R.layout.launch);
 
-		final Button button = (Button) findViewById(R.id.button_id);
-		button.setOnClickListener(new View.OnClickListener() {
+		final Button bt1 = (Button) findViewById(R.id.bt1);
+		bt1.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				// Perform action on click
+				Intent intent = new Intent(AndroidLauncher.this, InitMap.class);
+				intent.putExtra("map", "attack");
+				v.getContext().startActivity(intent);
 			}
-		});*/
+		});
+
+		final Button bt2 = (Button) findViewById(R.id.bt2);
+		bt2.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(AndroidLauncher.this, InitMap.class);
+				intent.putExtra("map", "defence");
+				v.getContext().startActivity(intent);
+			}
+		});
 
 
 
-		initialize(new DefenseMap(), config);
+		//initialize(new DefenseMap(), config);
 	}
 }

@@ -91,7 +91,8 @@ public abstract class GenericBicho extends Actor {
     @Override
     public void draw(Batch batch, float alpha){
         batch.draw(texture,this.getX(),this.getY(), Gdx.graphics.getWidth()*size, Gdx.graphics.getWidth()*size);
-        // Check if actor is inside screen
+
+        // Actor out of screen
         if (moveAttack && this.getY() == Gdx.graphics.getHeight()) {  // Remove actor from stage
             // TODO: Llamada al servidor
             this.remove();
