@@ -10,15 +10,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.characters.Centauro;
 import com.mygdx.characters.GenericBicho;
+import com.mygdx.characters.Invader;
 import com.mygdx.characters.Megaman;
 
 
@@ -34,6 +39,8 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 	public String goldLabel, ammoLabel;
 	private GlyphLayout goldLayout, ammoLayout;
 	private Texture background;
+
+	private int typeBicho = 1;
 
 
 	@Override
@@ -130,13 +137,24 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		Gdx.app.log("TOUCHDOWN", "Megaman va!");
 
-		Megaman b = new Megaman(screenX, Gdx.graphics.getHeight()-screenY, this);
-		b.setTouchable(Touchable.enabled);
+		GenericBicho actor = null;
+		switch (typeBicho) {
+			case 1:
+				actor = new Invader(screenX, Gdx.graphics.getHeight()-screenY, this);
+				break;
+			case 2:
+				actor = new Megaman(screenX, Gdx.graphics.getHeight()-screenY, this);
+				break;
+			case 3:
+				actor = new Centauro(screenX, Gdx.graphics.getHeight()-screenY, this);
+				break;
+		}
+		actor.setTouchable(Touchable.enabled);
 
-		if (gold - b.getPrice() >= 0) {
-			gold -= b.getPrice();
+		if (gold - actor.getPrice() >= 0) {
+			gold -= actor.getPrice();
 			goldLabel = "GOLD: " + gold;
-			stage.addActor(b);
+			stage.addActor(actor);
 		}
 
 		return true;
@@ -178,9 +196,10 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 		//w = Gdx.graphics.getWidth();
 		//h = Gdx.graphics.getHeight();
 
-		final TextButton button = new TextButton("Click me", skin, "default");
-		final TextButton button2 = new TextButton("Click me", skin, "default");
-		final TextButton button3 = new TextButton("Click me", skin, "default");
+		final ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("invader_button.png")))); //Set the button up
+		final ImageButton button2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("megaman_button.png")))); //Set the button up
+		final ImageButton button3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("centauro_button.png")))); //Set the button up
+
 
 		final TextButton settings = new TextButton("Click me", skin, "default");
 
@@ -203,21 +222,24 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 		button.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				button.setText("You clicked the button");
+				//button.setText("You clicked the button");
+				typeBicho = 1;
 			}
 		});
 
 		button2.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				button2.setText("You clicked the button");
+				//button2.setText("You clicked the button");
+				typeBicho = 2;
 			}
 		});
 
 		button3.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				button3.setText("You clicked the button");
+				//button3.setText("You clicked the button");
+				typeBicho = 3;
 			}
 		});
 
