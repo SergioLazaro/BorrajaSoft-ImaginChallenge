@@ -29,9 +29,9 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 	public Stage stage;
 	private Float sqLen;
 	private BitmapFont font, font2;
-	private int gold = 20;
+	public int gold = 20;
 	private int ammo = 10;
-	private String goldLabel, ammoLabel;
+	public String goldLabel, ammoLabel;
 	private GlyphLayout goldLayout, ammoLayout;
 	private Texture background;
 
@@ -130,11 +130,12 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		Gdx.app.log("TOUCHDOWN", "Megaman va!");
 
-		Megaman b = new Megaman(screenX, Gdx.graphics.getHeight()-screenY);
+		Megaman b = new Megaman(screenX, Gdx.graphics.getHeight()-screenY, this);
 		b.setTouchable(Touchable.enabled);
 
 		if (gold - b.getPrice() >= 0) {
 			gold -= b.getPrice();
+			goldLabel = "GOLD: " + gold;
 			stage.addActor(b);
 		}
 

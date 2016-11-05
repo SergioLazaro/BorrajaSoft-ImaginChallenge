@@ -3,6 +3,7 @@ package com.mygdx.characters;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.mygdx.game.MyGdxGame;
 
 public class DefaultBicho extends GenericBicho {
 
@@ -14,17 +15,22 @@ public class DefaultBicho extends GenericBicho {
     private static final String sTexture = "invader.png";
 
 
-    public DefaultBicho(int posX, int posY){
-        super(posX, posY, VEL, HEALTH, ATTACK, (float) SIZE, sTexture, PRICE);
+    public DefaultBicho(int posX, int posY, MyGdxGame game){
+        super(posX, posY, VEL, HEALTH, ATTACK, (float) SIZE, sTexture, PRICE, game);
 
         this.addListener(new InputListener(){
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int buttons){
                 ((DefaultBicho)event.getTarget()).started = true;
                 setVisible(false);
                 ((DefaultBicho)event.getTarget()).remove();
+                addGold();
                 return true;
             }
         });
     }
 
+    private void addGold() {
+        this.game.gold += this.getPrice();
+        this.game.goldLabel = "GOLD: " + this.game.gold;
+    }
 }
