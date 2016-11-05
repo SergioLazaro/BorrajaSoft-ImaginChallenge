@@ -215,15 +215,15 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				//button.setText("You clicked the button");
-				typeBicho = 1;
 			}
 		});
 
+		// Ammo
 		button2.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				//button2.setText("You clicked the button");
-				typeBicho = 2;
+
 			}
 		});
 
