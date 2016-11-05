@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         //SERVERNAME = "http://borrajasoftnode-sergiolazaro.rhcloud.com";
         //SERVERNAME = "https://borrajasoft-node.herokuapp.com";
         SERVERNAME = "http://192.168.3.1";
-        SERVERPORT = "1235";
+        SERVERPORT = "1234";
 
         //new ClientSocket(getApplicationContext()).execute(SERVERIP,SERVERPORT2);
         Button button = (Button) findViewById(R.id.button);
@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e("CONNECTING TO...",_url);
             mSocket.on("receive", onNewMessage);
             mSocket.on("connected", onConnected);
+            mSocket.on("warning", onWarning);
+            mSocket.on("endgame",onEndGame);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -63,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void notifyEnd(){
         mSocket.close();
+    }
+
+    public void notifyEndGame(){
+        mSocket.emit("result","");
     }
 
     //LLAMAR A ESTA FUNCION CUANDO SE SALGAN DE PANTALLA
@@ -106,6 +112,36 @@ public class MainActivity extends AppCompatActivity {
                     //JSONObject data = (JSONObject) args[0];
                     String data = (String) args[0];
                     Toast.makeText(mContext,"RECEIVE: " + data, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onWarning = new Emitter.Listener() {
+
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //JSONObject data = (JSONObject) args[0];
+                    String data = (String) args[0];
+                    Toast.makeText(mContext,data, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onEndGame = new Emitter.Listener() {
+
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //JSONObject data = (JSONObject) args[0];
+                    String data = (String) args[0];
+                    Toast.makeText(mContext,data, Toast.LENGTH_LONG).show();
                 }
             });
         }
