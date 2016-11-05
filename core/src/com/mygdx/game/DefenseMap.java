@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -212,7 +213,7 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		//w = Gdx.graphics.getWidth();
 		//h = Gdx.graphics.getHeight();
 
-		final ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("meteor_button.png")))); //Set the button up
+		final ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal ("meteor_button.png"), Pixmap.Format.LuminanceAlpha, true)))); //Set the button up
 		final ImageButton button2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("ammo_button.png")))); //Set the button up
 		final ImageButton button3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("snowflake_button.png")))); //Set the button up
 
