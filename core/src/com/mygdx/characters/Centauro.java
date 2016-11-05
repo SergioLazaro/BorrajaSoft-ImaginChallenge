@@ -9,7 +9,7 @@ import com.mygdx.game.GenericMap;
 public class Centauro extends GenericBicho{
 
     private static final int VEL = 100;
-    private static final int HEALTH = 100;
+    private static final int HEALTH = 20;
     private static final int ATTACK = 5;
     private static final int PRICE = 5;
     private static final String sTexture = "centauro.png";
@@ -17,31 +17,6 @@ public class Centauro extends GenericBicho{
 
     public Centauro(int posX, int posY, GenericMap game, boolean movAttack){
         super(posX, posY, VEL, HEALTH, ATTACK, (float) SIZE, sTexture, PRICE, game, movAttack);
-
-        /*this.addListener(new InputListener(){
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int buttons){
-                if (deductAmmo()) {
-                    ((Centauro) event.getTarget()).started = true;
-                    setVisible(false);
-                    ((Centauro) event.getTarget()).remove();
-                    addGold();
-                }
-                return true;
-            }
-        });*/
     }
-
-    /*private void addGold() {
-        this.game.gold += this.getPrice();
-        this.game.goldLabel = "GOLD: " + this.game.gold;
-    }
-
-    private boolean deductAmmo() {
-        if (game.ammo > 0) {
-            this.game.ammo--;
-            this.game.ammoLabel = "AMMO: " + this.game.ammo;
-            return true;
-        }else { return false; }
-    }*/
 
 }
