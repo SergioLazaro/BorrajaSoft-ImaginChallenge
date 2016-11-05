@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.GenericMap;
 
 
 public abstract class GenericBicho extends Actor {
@@ -19,10 +19,10 @@ public abstract class GenericBicho extends Actor {
     public boolean started = false;
     protected int posX, posY;
     protected int price;
-    protected MyGdxGame game;
+    protected GenericMap game;
 
 
-    public GenericBicho(int posX, int posY, int vel, int health, int attack, float size, String t, int price, MyGdxGame game) {
+    public GenericBicho(int posX, int posY, int vel, int health, int attack, float size, String t, int price, GenericMap game) {
         this.texture = new Texture(t);
         this.vel = vel;
         this.health = health;

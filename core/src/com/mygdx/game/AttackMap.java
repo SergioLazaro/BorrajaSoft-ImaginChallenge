@@ -27,16 +27,12 @@ import com.mygdx.characters.Invader;
 import com.mygdx.characters.Megaman;
 
 
-
-public class MyGdxGame implements ApplicationListener, InputProcessor {
+public class AttackMap extends GenericMap implements ApplicationListener, InputProcessor {
 	private SpriteBatch batch;
 	private Skin skin;
 	public Stage stage;
 	private Float sqLen;
 	private BitmapFont font, font2;
-	public int gold = 20;
-	private int ammo = 10;
-	public String goldLabel, ammoLabel;
 	private GlyphLayout goldLayout, ammoLayout;
 	private Texture background;
 
@@ -49,6 +45,7 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 		stage = new Stage();
 		sqLen = 200f; // CALCULATE A REASONABLE VALUE
+		gold = 20;
 
 		background = new Texture("background.png");
 
@@ -85,11 +82,6 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 		float w = goldLayout.width;
 		float y = Gdx.graphics.getHeight() - goldLayout.height;
 		font.draw(batch, goldLabel, Gdx.graphics.getWidth() - w, y);
-
-		ammoLayout.setText(font, ammoLabel);
-		w = ammoLayout.width;
-		y = y - ammoLayout.height - 30f;
-		font2.draw(batch, ammoLabel, Gdx.graphics.getWidth() - w, y);
 
 		batch.end();
 
@@ -149,7 +141,7 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 				actor = new Centauro(screenX, Gdx.graphics.getHeight()-screenY, this);
 				break;
 		}
-		actor.setTouchable(Touchable.enabled);
+		actor.setTouchable(Touchable.disabled);
 
 		if (gold - actor.getPrice() >= 0) {
 			gold -= actor.getPrice();
@@ -190,7 +182,6 @@ public class MyGdxGame implements ApplicationListener, InputProcessor {
 		font2.setColor(Color.RED);
 
 		goldLabel = "GOLD: " + gold;
-		ammoLabel = "AMMO: "+ ammo;
 		goldLayout = new GlyphLayout();
 		ammoLayout = new GlyphLayout();
 		//w = Gdx.graphics.getWidth();

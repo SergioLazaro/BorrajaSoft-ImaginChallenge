@@ -2,7 +2,7 @@ package com.mygdx.characters;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.GenericMap;
 
 /**
  * Created by alber on 04/11/2016.
@@ -17,7 +17,7 @@ public class Invader extends GenericBicho{
     private static final String sTexture = "invader.png";
     private static final double SIZE = 0.1;
 
-    public Invader(int posX, int posY, MyGdxGame game){
+    public Invader(int posX, int posY, GenericMap game){
         super(posX, posY, VEL, HEALTH, ATTACK, (float) SIZE, sTexture, PRICE, game);
 
         this.addListener(new InputListener(){
