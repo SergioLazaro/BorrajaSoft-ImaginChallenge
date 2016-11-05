@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.mygdx.game.GenericMap;
@@ -20,9 +22,10 @@ public abstract class GenericBicho extends Actor {
     protected int posX, posY;
     protected int price;
     protected GenericMap game;
+    protected boolean moveAttack;
 
 
-    public GenericBicho(int posX, int posY, int vel, int health, int attack, float size, String t, int price, GenericMap game) {
+    public GenericBicho(int posX, int posY, int vel, int health, int attack, float size, String t, int price, GenericMap game, boolean movAttack) {
         this.texture = new Texture(t);
         this.vel = vel;
         this.health = health;
@@ -30,16 +33,47 @@ public abstract class GenericBicho extends Actor {
         this.size = size;
         this.price = price;
         this.game = game;
+        this.moveAttack = moveAttack;
 
         this.posX = Math.max(0,Math.round(posX-Gdx.graphics.getWidth()*size/2));
         this.posY = Math.max(0,Math.round(posY-Gdx.graphics.getWidth()*size/2));
 
         setBounds(this.posX, this.posY, Gdx.graphics.getWidth()*size, Gdx.graphics.getWidth()*size);
 
-        this.addAction(Actions.moveTo(this.posX, Gdx.graphics.getHeight(), (Gdx.graphics.getHeight()-posY)/vel));
+        if (movAttack) {
+            this.addAction(Actions.moveTo(this.posX, Gdx.graphics.getHeight(), (Gdx.graphics.getHeight() - posY) / vel));
+        }
+        else {
+            this.addAction(Actions.moveTo(this.posX, 0, posY/vel));
+        }
+
+        this.addListener(new InputListener(){
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int buttons){
+                if (deductAmmo()) {
+                    ((GenericBicho) event.getTarget()).started = true;
+                    setVisible(false);
+                    ((GenericBicho) event.getTarget()).remove();
+                    addGold();
+                }
+                return true;
+            }
+        });
+
 
     }
 
+    private void addGold() {
+        this.game.gold += this.getPrice();
+        this.game.goldLabel = "GOLD: " + this.game.gold;
+    }
+
+    private boolean deductAmmo() {
+        if (game.ammo > 0) {
+            this.game.ammo--;
+            this.game.ammoLabel = "AMMO: " + this.game.ammo;
+            return true;
+        }else { return false; }
+    }
 
     /**
      * Deducts damage to the current life and returns false if the bicho has died
@@ -50,14 +84,18 @@ public abstract class GenericBicho extends Actor {
     }
 
     public int getPrice() {return price;}
+
     @Override
     public void draw(Batch batch, float alpha){
         batch.draw(texture,this.getX(),this.getY(), Gdx.graphics.getWidth()*size, Gdx.graphics.getWidth()*size);
 
         // Check if actor is inside screen
-        if (this.getY() == Gdx.graphics.getHeight()) {  // Remove actor from stage
+        if (moveAttack && this.getY() == Gdx.graphics.getHeight()) {  // Remove actor from stage
+            // TODO: Llamada al servidor
             this.remove();
+        }
 
+        if (!moveAttack && this.getY() == 0) {  // Remove actor from stage
             // TODO: Llamada al servidor
         }
     }

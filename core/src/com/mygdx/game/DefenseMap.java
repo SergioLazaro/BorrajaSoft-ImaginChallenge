@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.characters.GenericBicho;
-
+import com.mygdx.characters.Megaman;
 
 
 public class DefenseMap extends GenericMap implements ApplicationListener, InputProcessor {
@@ -30,9 +30,6 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 	public Stage stage;
 	private Float sqLen;
 	private BitmapFont font, font2;
-	public int gold = 20;
-	private int ammo = 10;
-	public String goldLabel, ammoLabel;
 	private GlyphLayout goldLayout, ammoLayout;
 	private Texture background;
 
@@ -45,6 +42,11 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 		stage = new Stage();
 		sqLen = 200f; // CALCULATE A REASONABLE VALUE
+
+		ammo = 10;
+		gold = 20;
+
+		stage.addActor(new Megaman(350, Gdx.graphics.getHeight(), this, false));
 
 		background = new Texture("background.png");
 
@@ -131,6 +133,13 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 	 */
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+		if (this.ammo > 0) {
+			this.ammo--;
+			this.ammoLabel = "AMMO: " + this.ammo;
+			return true;
+		}
+
 		/*Gdx.app.log("TOUCHDOWN", "Megaman va!");
 
 		GenericBicho actor = null;
@@ -223,7 +232,12 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				//button2.setText("You clicked the button");
-
+				if (gold - 10 >= 0) {
+					gold -= 10;
+					ammo += 10;
+					ammoLabel = "AMMO: " + ammo;
+					goldLabel = "GOLD: " + gold;
+				}
 			}
 		});
 

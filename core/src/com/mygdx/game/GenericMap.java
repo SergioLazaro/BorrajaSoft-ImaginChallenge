@@ -8,5 +8,7 @@ public abstract class GenericMap {
 
 
     public int gold;
-    public String goldLabel;
+    public String goldLabel, ammoLabel;
+    public int ammo;
+
 }
