@@ -209,7 +209,7 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 
 		final ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("meteor_button.png")))); //Set the button up
 		final ImageButton button2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("ammo_button.png")))); //Set the button up
-		final ImageButton button3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("ammo_button.png")))); //Set the button up
+		final ImageButton button3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("snowflake_button.png")))); //Set the button up
 
 
 		final TextButton settings = new TextButton("Click me", skin, "default");
