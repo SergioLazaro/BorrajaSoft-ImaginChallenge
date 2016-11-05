@@ -21,6 +21,7 @@ public class DefaultBicho extends GenericBicho {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int buttons){
                 ((DefaultBicho)event.getTarget()).started = true;
                 setVisible(false);
+                ((DefaultBicho)event.getTarget()).remove();
                 return true;
             }
         });
