@@ -16,8 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -30,7 +28,6 @@ import com.mygdx.server.ComunicationProtocol;
 
 public class AttackMap extends GenericMap implements ApplicationListener, InputProcessor {
 	private SpriteBatch batch;
-	private Skin skin;
 	private Float sqLen;
 	private BitmapFont font, font2;
 	private GlyphLayout goldLayout, ammoLayout;
@@ -42,7 +39,6 @@ public class AttackMap extends GenericMap implements ApplicationListener, InputP
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 		stage = new Stage();
 		sqLen = 200f; // CALCULATE A REASONABLE VALUE
 		gold = 20;
@@ -193,11 +189,6 @@ public class AttackMap extends GenericMap implements ApplicationListener, InputP
 		final ImageButton button3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("centauro_button.png")))); //Set the button up
 
 
-		final TextButton settings = new TextButton("Click me", skin, "default");
-
-		settings.setWidth(sqLen*3/5);
-		settings.setHeight(sqLen*3/5);
-		settings.setPosition(30f, Gdx.graphics.getHeight() - sqLen*3/5 - 30f);
 
 		button.setWidth(sqLen);
 		button.setHeight(sqLen);
@@ -235,19 +226,12 @@ public class AttackMap extends GenericMap implements ApplicationListener, InputP
 			}
 		});
 
-		settings.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y){
-				settings.setText("You clicked the button");
-			}
-		});
 
 		//TO-DO: ADD THE FUNCTIONALITY TO THE LISTENERS
 
 		stage.addActor(button);
 		stage.addActor(button2);
 		stage.addActor(button3);
-		stage.addActor(settings);
 	}
 
 	private void goldThread(){

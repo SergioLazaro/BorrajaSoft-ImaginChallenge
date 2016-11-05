@@ -96,13 +96,13 @@ public abstract class GenericBicho extends Actor {
         if (moveAttack && this.getY() >= Gdx.graphics.getHeight()) {  // Remove actor from stage
 
             if (this instanceof Invader) {
-                game.cp.notifyNewBicho(Math.round(this.getX()), 1);
+                game.cp.notifyNewBicho(Math.round(this.getX()*100/Gdx.graphics.getWidth()), 1);
             }
             else if(this instanceof Megaman) {
-                game.cp.notifyNewBicho(Math.round(this.getX()), 2);
+                game.cp.notifyNewBicho(Math.round(this.getX()*100/Gdx.graphics.getWidth()), 2);
             }
             else {
-                game.cp.notifyNewBicho(Math.round(this.getX()), 3);
+                game.cp.notifyNewBicho(Math.round(this.getX()*100/Gdx.graphics.getWidth()), 3);
             }
 
             this.remove();

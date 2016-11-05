@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -17,8 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -30,7 +27,6 @@ import java.util.Random;
 
 public class DefenseMap extends GenericMap implements ApplicationListener, InputProcessor {
 	private SpriteBatch batch;
-	private Skin skin;
 	private Float sqLen;
 	private BitmapFont font, font2;
 	private GlyphLayout goldLayout, ammoLayout;
@@ -51,7 +47,6 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 		stage = new Stage();
 		sqLen = (float) Math.round(Gdx.graphics.getWidth()/5.0); // CALCULATE A REASONABLE VALUE
 
@@ -213,16 +208,9 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 		//w = Gdx.graphics.getWidth();
 		//h = Gdx.graphics.getHeight();
 
-		final ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal ("meteor_button.png"), Pixmap.Format.LuminanceAlpha, true)))); //Set the button up
+		final ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("meteor_button.png")))); //Set the button up
 		final ImageButton button2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("ammo_button.png")))); //Set the button up
 		final ImageButton button3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("snowflake_button.png")))); //Set the button up
-
-
-		final TextButton settings = new TextButton("Click me", skin, "default");
-
-		settings.setWidth(sqLen*3/5);
-        settings.setHeight(sqLen*3/5);
-        settings.setPosition(30f, Gdx.graphics.getHeight() - sqLen*3/5 - 30f);
 
         button.setWidth(sqLen);
         button.setHeight(sqLen);
@@ -337,19 +325,12 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 			}
 		});
 
-		settings.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y){
-				settings.setText("You clicked the button");
-			}
-		});
 
 		//TO-DO: ADD THE FUNCTIONALITY TO THE LISTENERS
 
 		stage.addActor(button);
 		stage.addActor(button2);
 		stage.addActor(button3);
-		stage.addActor(settings);
 	}
 
 	private boolean close(float ax, float ay, int mx, int my) {

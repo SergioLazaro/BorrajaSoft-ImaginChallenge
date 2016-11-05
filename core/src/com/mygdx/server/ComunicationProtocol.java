@@ -73,17 +73,14 @@ public class ComunicationProtocol {
                     int bicho = Integer.valueOf(info[2]);
 
                     if (bicho == 1) {
-                        map.stage.addActor(new Invader(posx, Gdx.graphics.getHeight(), map, false));
+                        map.stage.addActor(new Invader(posx*Gdx.graphics.getWidth()/100, Gdx.graphics.getHeight(), map, false));
                     }
                     else if (bicho == 2) {
-                        map.stage.addActor(new Megaman(posx, Gdx.graphics.getHeight(), map, false));
+                        map.stage.addActor(new Megaman(posx*Gdx.graphics.getWidth()/100, Gdx.graphics.getHeight(), map, false));
                     }
                     else {
-                        map.stage.addActor(new Centauro(posx, Gdx.graphics.getHeight(), map, false));
+                        map.stage.addActor(new Centauro(posx*Gdx.graphics.getWidth()/100, Gdx.graphics.getHeight(), map, false));
                     }
-
-
-                    //COSICAS NAZIS AQUI
 
                 }
             });
