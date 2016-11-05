@@ -25,12 +25,12 @@ import com.mygdx.characters.Centauro;
 import com.mygdx.characters.GenericBicho;
 import com.mygdx.characters.Invader;
 import com.mygdx.characters.Megaman;
+import com.mygdx.server.ComunicationProtocol;
 
 
 public class AttackMap extends GenericMap implements ApplicationListener, InputProcessor {
 	private SpriteBatch batch;
 	private Skin skin;
-	public Stage stage;
 	private Float sqLen;
 	private BitmapFont font, font2;
 	private GlyphLayout goldLayout, ammoLayout;
@@ -46,6 +46,10 @@ public class AttackMap extends GenericMap implements ApplicationListener, InputP
 		stage = new Stage();
 		sqLen = 200f; // CALCULATE A REASONABLE VALUE
 		gold = 20;
+
+
+		cp = new ComunicationProtocol("1234", this);
+		cp.connect();
 
 		background = new Texture("background.png");
 

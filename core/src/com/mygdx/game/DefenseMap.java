@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.characters.GenericBicho;
-import com.mygdx.characters.Megaman;
+import com.mygdx.server.ComunicationProtocol;
 
 import java.util.Random;
 
@@ -30,7 +30,6 @@ import java.util.Random;
 public class DefenseMap extends GenericMap implements ApplicationListener, InputProcessor {
 	private SpriteBatch batch;
 	private Skin skin;
-	public Stage stage;
 	private Float sqLen;
 	private BitmapFont font, font2;
 	private GlyphLayout goldLayout, ammoLayout;
@@ -47,17 +46,19 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 	private final int MAX_METEOR_DISTANCE = 250;
 
 
+
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
 		skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 		stage = new Stage();
-		sqLen = 200f; // CALCULATE A REASONABLE VALUE
+		sqLen = (float) Math.round(Gdx.graphics.getWidth()/5.0); // CALCULATE A REASONABLE VALUE
 
-		ammo = INIT_AMMO;
+        cp = new ComunicationProtocol("1235", this);
+        cp.connect();
+
+        ammo = INIT_AMMO;
 		gold = INIT_GOLD;
-
-		stage.addActor(new Megaman(350, Gdx.graphics.getHeight(), this, false));
 
 		background = new Texture("background.png");
 

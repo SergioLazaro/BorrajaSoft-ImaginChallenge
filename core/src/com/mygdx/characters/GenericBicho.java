@@ -25,7 +25,7 @@ public abstract class GenericBicho extends Actor {
     protected boolean moveAttack;
 
 
-    public GenericBicho(int posX, int posY, int vel, int health, int attack, float size, String t, int price, GenericMap game, boolean movAttack) {
+    public GenericBicho(int posX, int posY, int vel, int health, int attack, float size, String t, int price, GenericMap game, boolean moveAttack) {
         this.texture = new Texture(t);
         this.vel = vel;
         this.health = health;
@@ -40,7 +40,7 @@ public abstract class GenericBicho extends Actor {
 
         setBounds(this.posX, this.posY, Gdx.graphics.getWidth()*size, Gdx.graphics.getWidth()*size);
 
-        if (movAttack) {
+        if (moveAttack) {
             this.addAction(Actions.moveTo(this.posX, Gdx.graphics.getHeight(), (Gdx.graphics.getHeight() - posY) / vel));
         }
         else {
@@ -93,8 +93,18 @@ public abstract class GenericBicho extends Actor {
         batch.draw(texture,this.getX(),this.getY(), Gdx.graphics.getWidth()*size, Gdx.graphics.getWidth()*size);
 
         // Actor out of screen
-        if (moveAttack && this.getY() == Gdx.graphics.getHeight()) {  // Remove actor from stage
-            // TODO: Llamada al servidor
+        if (moveAttack && this.getY() >= Gdx.graphics.getHeight()) {  // Remove actor from stage
+
+            if (this instanceof Invader) {
+                game.cp.notifyNewBicho(Math.round(this.getX()), 1);
+            }
+            else if(this instanceof Megaman) {
+                game.cp.notifyNewBicho(Math.round(this.getX()), 2);
+            }
+            else {
+                game.cp.notifyNewBicho(Math.round(this.getX()), 3);
+            }
+
             this.remove();
         }
 

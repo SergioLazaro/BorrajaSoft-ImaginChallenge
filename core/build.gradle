@@ -9,3 +9,8 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 eclipse.project {
     name = appName + "-core"
 }
+
+dependencies {
+    compile 'com.github.nkzawa:engine.io-client:0.6.0'
+    compile 'com.github.nkzawa:socket.io-client:0.6.0'
+}
