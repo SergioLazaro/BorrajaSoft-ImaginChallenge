@@ -8,17 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.URI;
 import java.net.URISyntaxException;
-
-/**import io.socket.client.IO;
-import io.socket.client.Manager;
-import io.socket.client.Socket;
-import io.socket.client.SocketIOException;
-import io.socket.emitter.Emitter;*/
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
@@ -44,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
         //new ClientSocket(getApplicationContext()).execute(SERVERIP,SERVERPORT2);
         Button button = (Button) findViewById(R.id.button);
-
+        Button buttonEnd = (Button) findViewById(R.id.buttonEnd);
+        Button buttonConnect = (Button) findViewById(R.id.buttonConnect);
 
         try {
             String _url = SERVERNAME + ":" + SERVERPORT;
@@ -52,29 +43,34 @@ public class MainActivity extends AppCompatActivity {
             Log.e("CONNECTING TO...",_url);
             mSocket.on("receive", onNewMessage);
             mSocket.on("connected", onConnected);
-            mSocket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
     }
+
+    public void connect(View view){
+        mSocket.connect();
+    }
+
     public void send(View view){
         notifyNewBicho(10,10);
     }
 
+    public void end(View view){
+        Toast.makeText(mContext,"EXITING",Toast.LENGTH_SHORT).show();
+        notifyEnd();
+    }
+
+    public void notifyEnd(){
+        mSocket.close();
+    }
+
     //LLAMAR A ESTA FUNCION CUANDO SE SALGAN DE PANTALLA
     public void notifyNewBicho(int posx, int bicho){
-        JSONObject data = new JSONObject();
-        try{
-            data.put("user",SERVERPORT);
-            data.put("posx",posx);
-            data.put("bicho",bicho);
-            mSocket.emit("message", data.toString());
-            Log.e("SENDING MESSAGE","foo bar");
-        }
-        catch(JSONException ex){
-
-        }
-    }
+        String data = SERVERPORT + ":" + posx + ":" + bicho;
+        mSocket.emit("message", data);
+        Log.e("SENDING MESSAGE","foo bar");
+ }
 
     //ON NEW MESSAGE RECEIVED
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
@@ -84,18 +80,17 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    try {
-                        String user = (String) data.get("user");
-                        int posx = data.getInt("posx");
-                        int bicho = data.getInt("bicho");
+                    String data = (String) args[0];
+                    String[] info = data.split(":");
 
-                        Toast.makeText(mContext,posx + " - " + bicho, Toast.LENGTH_SHORT).show();
-                        //COSICAS NAZIS AQUI
+                    String user = info[0];
+                    int posx = Integer.valueOf(info[1]);
+                    int bicho = Integer.valueOf(info[2]);
+                    Toast.makeText(mContext,posx + " - " + bicho, Toast.LENGTH_SHORT).show();
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+
+                    //COSICAS NAZIS AQUI
+
                 }
             });
         }
