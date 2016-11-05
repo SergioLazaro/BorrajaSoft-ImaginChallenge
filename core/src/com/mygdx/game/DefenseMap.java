@@ -238,8 +238,8 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 					public void run() {
 					for (int i=0; i<6; i++) {
 						Random r = new Random();
-						int rx = r.nextInt(Gdx.graphics.getWidth());
-						int ry = r.nextInt(Gdx.graphics.getHeight());
+						int rx = r.nextInt(Gdx.graphics.getWidth()-300);
+						int ry = r.nextInt(Gdx.graphics.getHeight()-300);
 
 						Array<Actor> actors = stage.getActors();
 						for (Actor a:actors) {
@@ -267,7 +267,8 @@ public class DefenseMap extends GenericMap implements ApplicationListener, Input
 
                         MyActor a1 = new MyActor("001.png", rx,ry);
                         stage.addActor(a1);
-						try {
+
+                        try {
 							Thread.sleep(400);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
